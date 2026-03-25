@@ -1,22 +1,29 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    private var imageView: UIImageView?
-    private var nameLabel: UILabel?
-    private var usernameLabel: UILabel?
-    private var bioLabel: UILabel?
+    
+    // MARK: - Properties
+    
+    private var imageView = UIImageView()
+    private var nameLabel = UILabel()
+    private var usernameLabel = UILabel()
+    private var bioLabel = UILabel()
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        profileImageloaded()
-        nameLabelLoaded()
-        usernameLabelLoaded()
-        bioLabelLoaded()
-        logoutButtonLoaded()
+        setupProfileImage()
+        setupNameLabel()
+        setupUsernameLabel()
+        setupBioLabel()
+        setupLogoutButton()
     }
     
-    func profileImageloaded() {
+    // MARK: - Setup
+    
+    func setupProfileImage() {
         let profileImage = UIImage(named: "Userpic")
         let imageView = UIImageView(image: profileImage)
         
@@ -30,7 +37,7 @@ final class ProfileViewController: UIViewController {
         self.imageView = imageView
     }
     
-    func nameLabelLoaded() {
+    func setupNameLabel() {
         let nameLabel = UILabel()
         nameLabel.text = "Екатерина Новикова"
         nameLabel.font = UIFont.systemFont(ofSize: 23, weight: .bold)
@@ -41,15 +48,12 @@ final class ProfileViewController: UIViewController {
         nameLabel.widthAnchor.constraint(equalToConstant: 241).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         
-        if let imageView = self.imageView {
-            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
-        }
-        
+        nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
+
         self.nameLabel = nameLabel
-        
     }
     
-    func usernameLabelLoaded() {
+    func setupUsernameLabel() {
         let usernameLabel = UILabel()
         usernameLabel.text = "@ekaterina_nov"
         usernameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
@@ -59,15 +63,13 @@ final class ProfileViewController: UIViewController {
         view.addSubview(usernameLabel)
         
         usernameLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        
-        if let nameLabel = self.nameLabel {
-            usernameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8).isActive = true
-        }
+
+        usernameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8).isActive = true
         
         self.usernameLabel = usernameLabel
     }
     
-    func bioLabelLoaded() {
+    func setupBioLabel() {
         let bioLabel = UILabel()
         bioLabel.text = "Hello, world!"
         bioLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
@@ -77,21 +79,19 @@ final class ProfileViewController: UIViewController {
         view.addSubview(bioLabel)
         
         bioLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        
-        if let usernameLabel = self.usernameLabel {
-            bioLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 8).isActive = true
-        }
+
+        bioLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 8).isActive = true
         
         self.bioLabel = bioLabel
     }
     
-    func logoutButtonLoaded() {
+    func setupLogoutButton() {
         let logoutButton = UIButton.systemButton(
             with: UIImage(systemName: "ipad.and.arrow.forward")!,
             target: nil,
             action: nil)
         
-        logoutButton.tintColor = UIColor(named: "YP Red")
+        logoutButton.tintColor = UIColor(named: "YPRed")
         
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -102,10 +102,11 @@ final class ProfileViewController: UIViewController {
         
         view.addSubview(logoutButton)
         logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        if let imageView = self.imageView {
-            logoutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
-        }
+        
+        logoutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
     }
+    
+    // MARK: - Public Methods
     
     func didTapLogoutButton() {
         print("didtap")
