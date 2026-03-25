@@ -1,8 +1,12 @@
 import UIKit
 
-class ImagesListViewController: UIViewController {
+final class ImagesListViewController: UIViewController {
 
+    // MARK: - IBOutlets
+    
     @IBOutlet private var tableView: UITableView!
+    
+    // MARK: - Properties
     
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
@@ -14,6 +18,8 @@ class ImagesListViewController: UIViewController {
         return formatter
     } ()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,7 +27,10 @@ class ImagesListViewController: UIViewController {
     }
      
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showSingleImageSegueIdentifier {
+        guard segue.identifier == showSingleImageSegueIdentifier else {
+            super.prepare(for: segue, sender: sender)
+            return
+        }
             guard
                 let viewController = segue.destination as? SingleImageViewController,
                 let indexPath = sender as? IndexPath
@@ -32,10 +41,9 @@ class ImagesListViewController: UIViewController {
             
             let image = UIImage(named: photosName[indexPath.row])
             viewController.image = image
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
     }
+
+    // MARK: - Public Methods
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
@@ -54,6 +62,8 @@ class ImagesListViewController: UIViewController {
 
 // MARK: - Extensions
 
+// MARK: - UITableViewDataSource
+
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photosName.count
@@ -71,6 +81,8 @@ extension ImagesListViewController: UITableViewDataSource {
         return imageListCell
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
