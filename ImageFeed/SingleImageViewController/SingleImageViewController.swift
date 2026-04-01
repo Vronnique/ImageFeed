@@ -1,12 +1,19 @@
 import UIKit
 
 final class SingleImageViewController: UIViewController {
+    
+    // MARK: - Properties
+    
     var image: UIImage?
+    
+    // MARK: - IBOutlets
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var backwardButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var sharingButton: UIButton!
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +30,8 @@ final class SingleImageViewController: UIViewController {
         scrollView.minimumZoomScale = 0.1
     }
     
+    // MARK: - Private Methods
+    
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale
@@ -33,12 +42,12 @@ final class SingleImageViewController: UIViewController {
         let vScale = visibleRectSize.height / imageSize.height
         let scale = min(maxZoomScale, max(minZoomScale, min(hScale, vScale)))
         scrollView.setZoomScale(scale, animated: false)
-        scrollView.layoutIfNeeded()
-        let newContentSize = scrollView.contentSize
-        let x = (newContentSize.width - visibleRectSize.width) / 2
-        let y = (newContentSize.height - visibleRectSize.height) / 2
-        scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+        
+        updateContentInset()
+        
     }
+    
+    // MARK: - IBActions
     
     @IBAction func didTapBackwardButton() {
         dismiss(animated: true, completion: nil)
@@ -59,12 +68,34 @@ final class SingleImageViewController: UIViewController {
     
 }
 
+// MARK: - UIScrollViewDelegate
+
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
     
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        updateContentInset()
     }
+    
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        updateContentInset()
+    }
+    
+    // метод центрирования
+    private func updateContentInset() {
+           let scrollViewSize = scrollView.bounds.size
+           let imageViewSize = imageView.frame.size
+           
+           let verticalInset = max(0, (scrollViewSize.height - imageViewSize.height) / 2)
+           let horizontalInset = max(0, (scrollViewSize.width - imageViewSize.width) / 2)
+           
+           scrollView.contentInset = UIEdgeInsets(
+               top: verticalInset,
+               left: horizontalInset,
+               bottom: verticalInset,
+               right: horizontalInset
+           )
+       }
 }
